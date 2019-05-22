@@ -72,8 +72,11 @@
         </div>
         <div id="navbar" class="navbar-collapse collapse">
           <ul id="top-menu" class="nav navbar-nav navbar-right mu-main-nav">
-            <li><a href="index.html">INICIO</a></li>
-            <li class="active"><a href="blog-archive.html">OTRAS PUBLICACIONES</a></li>                                                                    
+            <li><a href="index.html">Inicio</a></li>
+            <li><a href="blog-archive.html?reftipo=Educación&refcat=Sismos">Educación</a></li>
+            <li><a href="blog-archive.html?reftipo=Reflexión&refcat=Sismos">Reflexión</a></li>
+            <li><a href="blog-archive.html?reftipo=Acción&refcat=Sismos">Acción</a></li>
+            <li><a href="blog-archive.html?reftipo=Proyectos&refcat=Sismos">Proyectos</a></li>                                                                  
           </ul>                            
         </div><!--/.nav-collapse -->       
       </div>          
@@ -92,33 +95,65 @@
               <div class="col-md-8 col-sm-8">
                 <div class="mu-blog-content">
                   <!-- Start Single blog item -->
+                    <div id="titulo"></div>
                     <div id="lista-entradas"></div>
-                  <!-- End Single blog item -->
-                </div>
-                <div class="row">
-                  <div class="col-md-12">
-                    <div class="mu-blog-pagination-area">
-                      <nav>
-                        <ul class="mu-blog-pagination">
-                          <li>
-                            <a href="#" aria-label="Previous">
-                              <span class="fa fa-long-arrow-left"></span>
-                            </a>
-                          </li>
-                          <li><a href="#">1</a></li>
-                          <li><a href="#">2</a></li>
-                          <li class="active"><a href="#">3</a></li>
-                          <li><a href="#">4</a></li>
-                          <li><a href="#">5</a></li>
-                          <li>
-                            <a href="#" aria-label="Next">
-                              <span class="fa fa-long-arrow-right"></span>
-                            </a>
-                          </li>
-                        </ul>
-                      </nav>
+                    <p>
+                      <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#createEntrada-modal">
+                        <span class="glyphicon glyphicon-plus"></span>
+                        Añadir Entrada
+                      </button>
+      
+                    <div class="modal fade" id="createEntrada-modal" tabindex="-1" role="dialog" aria-labelledby="createEntradaLabel" aria-hidden="true">
+                      <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+                        <div class="modal-content">
+                          <div class="modal-header">
+                            <h2 class="modal-title" id="exampleModalLabel">Agregar/editar entrada</h2>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                              <span aria-hidden="true">&times;</span>
+                            </button>
+                          </div>
+                          <div class="modal-body " >
+                              <form  class="form-horizontal" role="form" id="createParrafo" enctype="multipart/form-data">
+                                  <div class="form-group">
+                                    <div class="form-group">
+                                      <label for="titulo" class="col-sm-2 control-label">Título</label>
+                                      <div class="col-sm-9">
+                                        <input type="text" class="form-control" id="tituloEntrada" placeholder="Título">
+                                      </div>
+                                    </div>
+                                    <div class="form-group">
+                                      <label for="imagen" class="col-sm-2 control-label">Imagen</label>
+                                      <div class="col-sm-9">
+                                        <input type="file" class="form-control" accept="image/*" id="imagen">
+                                      
+                                        <div class="checkbox">
+                                          <label>
+                                            <input type="checkbox" id="deleteImagen-submit"><label id="deleteImagen"></label> 
+                                          </label>
+                                        </div>
+                                      
+                                      </div>
+                                    </div>
+                                    <div class="form-group">
+                                      <label for="descripcionimagen" class="col-sm-2 control-label">Descripción de la imagen</label>
+                                      <div class="col-sm-9">
+                                          <textarea name="descripcionimagen" class="form-control" id="descripcionimagen" cols="30" rows="4" placeholder="Descripción de la imagen"></textarea>                                                  
+                                      </div>
+                                    </div>
+                                  </div>
+                              </form>
+                          </div>
+                          <div class="modal-footer">
+                            <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
+                            <button type="button" class="btn btn-primary" id="createEntrada-submit" onclick="$.createEntrada(); return false;" enctype="multipart/form-data">Guardar cambios</button>
+                          </div>
+                        </div>
+                      </div>
                     </div>
-                  </div>
+
+                    </p>
+
+                  <!-- End Single blog item -->
                 </div>
               </div>
               <!-- Start Blog Sidebar -->
@@ -126,20 +161,15 @@
                 <aside class="mu-blog-sidebar">
                   <!-- Blog Sidebar Single -->
                   <div class="mu-blog-sidebar-single">
-                    <h3>Categorias</h3>
-                    <ul class="mu-catg-nav">
-                      <li><a href="#">Sismos</a></li>
-                      <li><a href="#">Erupción volcánica</a></li>
-                      <li><a href="#">Inestabilidad de laderas</a></li>
-                      <li><a href="#">Asteroides y cometas</a></li>
-                      <li><a href="#">Inundaciones</a></li>
-                    </ul>
-                  </div>
-                  <!-- End Blog Sidebar Single -->
-                  <!-- Blog Sidebar Single -->
-                  <div class="mu-blog-sidebar-single">
-                    <h3>Glosario</h3>
-                    <div class="tag-cloud" id="lista-glosario"></div>
+                      <h3>Categorias</h3>
+                      <ul class="mu-catg-nav">
+                          <li><a href="javascript:cambiarCategoria('refcat=Sismos');">Sismos</a></li>
+                          <li><a href="javascript:cambiarCategoria('refcat=Erupción Volcánica');">Erupción Volcánica</a></li>
+                          <li><a href="javascript:cambiarCategoria('refcat=Inestabilidad de Laderas');">Inestabilidad de Laderas</a></li>
+                          <li><a href="javascript:cambiarCategoria('refcat=Asteroides y Cometas');">Asteroides y Cometas</a></li>
+                          <li><a href="javascript:cambiarCategoria('refcat=Inundación');">Inundación</a></li>
+                          <li><a href="javascript:cambiarCategoria('refcat=Caída de Ceniza');">Caída de Ceniza</a></li>
+                      </ul>
                   </div>
                   <!-- End Blog Sidebar Single -->
                 </aside>

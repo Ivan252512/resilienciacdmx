@@ -198,7 +198,7 @@ jQuery(function($){
                .parent().removeClass("active")
                .end().filter("[href=\\#"+id+"]").parent().addClass("active");
          }           
-      })
+      });
   
   /* ----------------------------------------------------------- */
   /*  11. HOVER DROPDOWN MENU
@@ -241,31 +241,111 @@ jQuery(function($){
       jQuery('#aa-preloader-area').delay(300).fadeOut('slow'); // will fade out      
     })
   
+
   /* ----------------------------------------------------------- */
-  /*  14. Cargar entradas
+  /*  14. Cargar entradas generales
   /* ----------------------------------------------------------- */
 
   jQuery( function() {
+    if ($.urlParam('reftipo')!=null || $.urlParam('refcat')!=null || $.urlParam('refentrada')!=null) 
+      return ;
     $.ajax({
-      url : "http://127.0.0.1:8000/api/v1.0/entradas/",
+      url : "http://127.0.0.1:8000/api/v1.0/general/",
       dataType: "json",
       success : function (data) {
-        var listaEntradas = $("#lista-entradas");
+        var listaProyectos = $("#lista-proyectos");
+        var listaEducacion = $("#lista-educacion");
+        var listaReflexion = $("#lista-reflexion");
+        var listaAccion = $("#lista-accion");
         $.each(data, function(index, elemento){
-          listaEntradas.append(
-            '<article class="mu-news-single">' +
-              '<h3><a href="#">' + elemento.titulo + '</a></h3>' +
-              '<figure class="mu-news-img">' +
-                '<a href="#"><img src="' + elemento.primerparrafo.imagen + '" alt="img"></a>' +
-              '</figure>' +
-              '<div class="mu-news-single-content">' +
-                '<p>' + elemento.primerparrafo.parrafo + '</p>' +
-                '<div class="mu-news-single-bottom">' +
-                  '<a href="blog-single.html/id='+ elemento.id +'" class="mu-readmore-btn">Leer más</a>' +
-                '</div>' +
-              '</div>' +
-            '</article>'
-          );
+          var video = "";
+          var parrafo = elemento.parrafo;
+          if (elemento.youtube) {
+           parrafo = 
+           '<div class="embed-container">' +
+             elemento.parrafo +
+           '</div>'+
+           '<br>';
+          }else {
+            if (elemento.video!=null) {
+             video = 
+             '<video width="100%" controls>'+
+               '<source src="'+ elemento.video+'" type="video/mp4">'+
+             '</video>'+
+             '<br>';
+            }
+          }
+          var imagen = "";
+          if (elemento.imagen!=null) {
+             imagen = 
+             '<figure class="mu-news-img">'+
+               '<img src="'+ elemento.imagen +'" alt="img">'+                      
+             '</figure>'+
+             '<br>';
+          }
+          switch (elemento.entrada.tipo) {
+            case "Proyectos":
+              listaProyectos.append(
+                '<article class="mu-news-single">' +
+                  '<h3>' + elemento.entrada.titulo + '</h3>' +
+                  imagen+
+                  '<div class="mu-news-single-content">' +
+                    '<p>' + elemento.parrafo + '</p>' +
+                    '<div class="mu-news-single-bottom">' +
+                      '<a href="blog-single.html?refentrada=' + elemento.entrada.id + '" class="mu-readmore-btn">Leer más</a>' +
+                    '</div>' +
+                  '</div>' +
+                '</article>'
+              );              
+              break;
+            
+            case "Educación":
+              listaEducacion.append(
+                '<article class="mu-news-single">' +
+                  '<h3>' + elemento.entrada.titulo + '</h3>' +
+                  imagen +
+                  '<div class="mu-news-single-content">' +
+                    '<p>' + elemento.parrafo + '</p>' +
+                    '<div class="mu-news-single-bottom">' +
+                      '<a href="blog-single.html?refentrada=' + elemento.entrada.id + '" class="mu-readmore-btn">Leer más</a>' +
+                    '</div>' +
+                  '</div>' +
+                '</article>'
+              );               
+              break;
+            
+            case "Reflexión":
+              listaReflexion.append(
+                '<article class="mu-news-single">' +
+                  '<h3>' + elemento.entrada.titulo + '</h3>' +
+                  imagen +
+                  '<div class="mu-news-single-content">' +
+                    '<p>' + elemento.parrafo + '</p>' +
+                    '<div class="mu-news-single-bottom">' +
+                      '<a href="blog-single.html?refentrada=' + elemento.entrada.id + '" class="mu-readmore-btn">Leer más</a>' +
+                    '</div>' +
+                  '</div>' +
+                '</article>'
+              );             
+              break;
+            
+            case "Acción":
+              listaAccion.append(
+                '<article class="mu-news-single">' +
+                  '<h3>' + elemento.entrada.titulo + '</h3>' +
+                  imagen+
+                  '<div class="mu-news-single-content">' +
+                    '<p>' + elemento.parrafo + '</p>' +
+                    '<div class="mu-news-single-bottom">' +
+                      '<a href="blog-single.html?refentrada=' + elemento.entrada.id + '" class="mu-readmore-btn">Leer más</a>' +
+                    '</div>' +
+                  '</div>' +
+                '</article>'
+              );               
+              break;         
+            default:
+              break;
+          }
         });
       },
       error: function() {
@@ -274,51 +354,127 @@ jQuery(function($){
     });
   });
 
-    /* ----------------------------------------------------------- */
-  /*  14. Cargar proyectos
-  /* ----------------------------------------------------------- */
+  /*----------------------------------------------------------- */
+  /* 15. Load título of entradas
+  /*----------------------------------------------------------- */
 
+  //Título
   jQuery( function() {
+    if ($.urlParam('refentrada')==null) 
+      return ;
     $.ajax({
-      url : "http://127.0.0.1:8000/api/v1.0/proyectos/",
-      dataType: "json",
-      success : function (data) {
-        var listaEntradas = $("#lista-proyectos");
-        $.each(data, function(index, elemento){
-          listaEntradas.append(
-            '<article class="mu-news-single">' +
-              '<h3><a href="#">' + elemento.titulo + '</a></h3>' +
-              '<figure class="mu-news-img">' +
-                '<a href="#"><img src="' + elemento.parrafos[0].imagen + '" alt="img"></a>' +
-              '</figure>' +
-              '<div class="mu-news-single-content">' +
-                '<p>' + elemento.parrafos[0].parrafo + '</p>' +
-                '<div class="mu-news-single-bottom">' +
-                  '<a href="blog-single.html/id='+ elemento.id +'" class="mu-readmore-btn">Leer más</a>' +
-                '</div>' +
-              '</div>' +
-            '</article>'
-          );
-        });
-      },
-      error: function() {
-        console.log("No se ha podido obtener la información");
+     url : "http://127.0.0.1:8000/api/v1.0/entradas/"+$.urlParam('refentrada')+"/",
+     dataType: "json",
+     success : function (data) {
+       $("#tituloentrada").append(
+         '<h1>'+data.titulo+'</h1>' + 
+         '<hr>');
+     },
+     error: function() {
+       console.log("No se ha podido obtener la información");
       }
     });
   });
 
-    /* ----------------------------------------------------------- */
-  /*  15. Cargar Glosario
+  //Parrafos 
+  jQuery( function() {
+    if ($.urlParam('refentrada')==null) 
+      return ;
+    $.ajax({
+    url : "http://127.0.0.1:8000/api/v1.0/parrafovista/?refentrada="+$.urlParam('refentrada'),
+    dataType: "json",
+    success : function (data) {
+      var listaEntradas = $("#lista-parrafos");
+      $.each(data, function(index, elemento){
+      var video = "";
+        var parrafo = "";
+        if (elemento.parrafo!=null)
+          parrafo = elemento.parrafo;
+
+        if (elemento.youtube) {
+          parrafo = 
+          '<div class="embed-container">' +
+            elemento.parrafo +
+          '</div><br>'+
+          elemento.descripcionvideo+
+          '<br>';
+        }else {
+          if (elemento.video!=null) {
+          video = 
+          '<video width="100%" controls>'+
+            '<source src="'+ elemento.video+'" type="video/mp4">'+
+          '</video><br>'+
+          '<center><i>'+elemento.descripcionvideo+'</i></center>' +
+          '<br>';
+          }
+        }
+        var imagen = "";
+        if (elemento.imagen!=null) {
+          imagen = 
+          '<figure class="mu-news-img">'+
+            '<a href="#"><img src="'+ elemento.imagen +'" alt="img"></a>'+                      
+          '</figure><br>'+
+          '<center><i>'+elemento.descripcionimagen+'</i></center>' +
+          '<br>'; 
+        }
+
+        var subtitulo = "";
+        if (elemento.subtitulo!=null)
+          subtitulo = elemento.subtitulo;
+
+        var editButton = 
+        '<button type="button" class="btn btn-warning" data-toggle="modal" data-target="#createParrafo-modal" onclick="$.editParrafo('+elemento.id+');">'+
+          'Editar el párrafo inferior'+
+        '</button>';
+
+        var deleteButton = 
+        '<button type="button" class="btn btn-danger" onclick="$.deleteParrafo('+elemento.id+');">'+
+          'Eliminar el párrafo inferior'+
+        '</button>';
+
+         listaEntradas.append(
+          '<br>' +
+          editButton + ' ' + deleteButton +
+          '<h2>'+ subtitulo +'</h2>'+
+          '<br>' +
+          parrafo + '<br>' +
+          video +
+          imagen
+         );
+       });
+     },
+     error: function() {
+       console.log("No se ha podido obtener la información");
+      }
+    });
+  });
+
+  /* ----------------------------------------------------------- */
+  /*  16. Cargar Glosario
   /* ----------------------------------------------------------- */
 
   jQuery( function() {
+    if ($.urlParam('refentrada')==null) 
+      return ;
     $.ajax({
-      url : "http://127.0.0.1:8000/api/v1.0/glosario/",
+      url : "http://127.0.0.1:8000/api/v1.0/glosario/?refentrada="+$.urlParam('refentrada'),
       dataType: "json",
       success : function (data) {
         var listaGlosario = $("#lista-glosario");
         $.each(data, function(index, elemento){
+
+          var editButton = 
+          '<button type="button" class="btn btn-warning" data-toggle="modal" data-target="#createTermini-modal" onclick="$.editTermino('+elemento.id+');">'+
+            'Editar el termino inferior'+
+          '</button>';
+  
+          var deleteButton = 
+          '<button type="button" class="btn btn-danger" onclick="$.deleteTermino('+elemento.id+');">'+
+            'Eliminar el termino inferior'+
+          '</button>';
+
           listaGlosario.append(
+            editButton + deleteButton + '<br>' +
             '<b>' + elemento.termino + ': </b>' + elemento.definicion + '<hr>'
           );
         });
@@ -330,31 +486,360 @@ jQuery(function($){
   });
 
     /* ----------------------------------------------------------- */
-  /*  16. Cargar párrafos
+  /*  17. Cargar entradas ordenadas.
   /* ----------------------------------------------------------- */
 
-  function cargarParrafos(entrada) {
+  jQuery( function() {
+    if ($.urlParam('reftipo')==null || $.urlParam('refcat')==null) 
+      return ;
+    var urlLocal = "http://127.0.0.1:8000/api/v1.0/general/?reftipo="+$.urlParam('reftipo')+"&refcat="+$.urlParam('refcat');
     $.ajax({
-      url : "http://127.0.0.1:8000/api/v1.0/parrafos/",
+      url : urlLocal,
       dataType: "json",
       success : function (data) {
-        var listaEntradas = $("#lista-parrafos");
+        var listaEntradas = $("#lista-entradas");
         $.each(data, function(index, elemento){
+          var video = "";
+          var parrafo = elemento.parrafo;
+          if (elemento.youtube) {
+           parrafo = 
+           '<div class="embed-container">' +
+             elemento.parrafo +
+           '</div>'+
+           '<br>';
+          }else {
+            if (elemento.video!=null) {
+             video = 
+             '<video width="100%" controls>'+
+               '<source src="'+ elemento.video+'" type="video/mp4">'+
+             '</video>'+
+             '<br>';
+            }
+          }
+          var imagen = "";
+          if (elemento.imagen!=null) {
+             imagen = 
+             '<figure class="mu-news-img">'+
+               '<img src="'+ elemento.imagen +'" alt="img">'+                      
+             '</figure>'+
+             '<br>';
+          }
+
+
+          var editButton = 
+          '<button type="button" class="btn btn-warning" data-toggle="modal" data-target="#createEntrada-modal" onclick="$.editEntrada('+elemento.id+');">'+
+            'Editar la entrada inferior'+
+          '</button>';
+  
+          var deleteButton = 
+          '<button type="button" class="btn btn-danger" onclick="$.deleteEntrada('+elemento.id+');">'+
+            'Eliminar la entrada inferior'+
+          '</button>';
+
           listaEntradas.append(
             '<article class="mu-news-single">' +
-              '<h3><a href="#">' + elemento.titulo + '</a></h3>' +
-              '<figure class="mu-news-img">' +
-                '<a href="#"><img src="static/assets/img/news/1.jpg" alt="img"></a>' +
-              '</figure>' +
+              editButton + ' ' + deleteButton +
+              '<h3>' + elemento.entrada.titulo + '</h3>' +
+              imagen+
               '<div class="mu-news-single-content">' +
-                '<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Optio est quaerat magnam exercitationem voluptas, voluptatem sed quam ab laborum voluptatum tempore dolores itaque, molestias vitae.</p>' +
+                '<p>' + elemento.descripcionimagen+ '</p>' +
                 '<div class="mu-news-single-bottom">' +
-                  '<a href="#" class="mu-readmore-btn">Leer más</a>' +
+                  '<a href="blog-single.html?refentrada=' + elemento.entrada.id + '" class="mu-readmore-btn">Leer más</a>' +
                 '</div>' +
               '</div>' +
             '</article>'
-          );
+          );              
         });
+      },
+      error: function() {
+        console.log("No se ha podido obtener la información");
+      }
+    });
+  });
+
+  /* ----------------------------------------------------------- */
+  /*  18. Obtener parámetros de url
+  /* ----------------------------------------------------------- */
+
+  $.urlParam = function(name){
+    var results = new RegExp('[\?&]' + name + '=([^&#]*)').exec(window.location.href);
+    if (results==null) {
+       return null;
+    }
+    return decodeURI(results[1]) || 0;
+  };
+
+  /* ----------------------------------------------------------- */
+  /*  19. Lanzar título de las entradas.
+  /* ----------------------------------------------------------- */
+
+  jQuery( function() {
+    if ($.urlParam('reftipo')==null || $.urlParam('refcat')==null) 
+      return ;
+    var titulo = $("#titulo");
+    titulo.append( 
+      '<h1>'+$.urlParam('reftipo')+': '+$.urlParam('refcat')+'</h1>' +
+      '<br>');
+  });
+
+  /* ----------------------------------------------------------- */
+  /*  20. Create parrafo
+  /* ----------------------------------------------------------- */
+
+  $.createParrafo = function(entrada = null) {
+      var formData = new FormData();
+      formData.append("subtitulo", $('#subtitulo').val());
+      formData.append("parrafo", $('#parrafo').val());
+      $.sendFile(formData, 'video', $('#video'), $.validateCheckbox($('#deleteVideo-submit')));
+      $.sendFile(formData, 'imagen', $('#imagen'), $.validateCheckbox($('#deleteImagen-submit')));
+      formData.append("descripcionvideo", $('#descripcionvideo').val());
+      formData.append("descripcionimagen", $('#descripcionimagen').val());
+      formData.append("youtube", $.validateCheckbox($('#youtube')));
+      formData.append("esprincipal", false);
+      formData.append("entrada", $.urlParam('refentrada'));
+      if (entrada == null) {
+        $.ajax({
+            url: "http://127.0.0.1:8000/api/v1.0/parrafoedit/",
+            type: "POST",
+            data: formData,
+            contentType: false,
+            processData: false,
+            success: function() { 
+              alert('¡Párrafo agregado exitosamente!');
+              location.reload(); },
+        });
+    }else{
+      $.ajax({
+          url: "http://127.0.0.1:8000/api/v1.0/parrafoedit/"+entrada+"/",
+          type: "PUT",
+          data: formData,
+          contentType: false,
+          processData: false,
+          success: function() { 
+            alert('¡Párrafo modificado exitosamente!');
+            location.reload(); },
+      });
+    }
+  };
+
+  $.sendFile = function(formData, fileUpload, fileSend, borrar){
+    if(fileSend.val()==null || fileSend.val()==""){
+      if(borrar){
+        formData.append(fileUpload, new File([""], ""));
+      }
+      return;
+    }
+    formData.append(fileUpload, fileSend[0].files[0]);
+  };
+
+  $.validateCheckbox = function(cb){
+    if (cb.is(':checked'))
+      return true;
+    return false;
+  };
+
+  /* ----------------------------------------------------------- */
+  /*  20. Update párrafo
+  /* ----------------------------------------------------------- */
+
+
+  //Function that loads the previous form values.
+  $.editParrafo = function(entrada){
+    $.ajax({
+      url : "http://127.0.0.1:8000/api/v1.0/parrafoedit/"+entrada+"/",
+      dataType: "json",
+      success : function (data) {
+
+        $('#subtitulo').attr('value', data.subtitulo);
+        $('#parrafo').append(data.parrafo);
+        $('#descripcionvideo').append(data.descripcionvideo);
+
+
+        var video = " ";
+        var imagen = " ";
+
+        if (data.video!=null)
+          video = data.video.split("/");
+
+        if (data.imagen!=null)
+          imagen = data.imagen.split("/");
+
+        $('#deleteVideo').append("Eliminar " + video[video.length-1]);
+        $('#deleteImagen').append("Eliminar " + imagen[imagen.length-1]);
+        
+        $('#descripcionimagen').append( data.descripcionimagen);
+        $('#createParrafo-submit').attr('onclick', "$.createParrafo("+entrada+"); return false;");
+        data.youtube ? $('#youtube').attr('checked', 'checked') : $('#youtube').removeAttr('checked');
+      },
+      error: function() {
+        console.log("No se ha podido obtener la información");
+      }
+    });
+  };
+
+
+  /* ----------------------------------------------------------- */
+  /*  20. Delete párrafo
+  /* ----------------------------------------------------------- */
+
+
+  //Function that loads the previous form values.
+  $.deleteParrafo = function(entrada){
+    confirm("¿Está seguro de querer eliminar este mensaje?");
+    $.ajax({
+      url: "http://127.0.0.1:8000/api/v1.0/parrafoedit/"+entrada+"/",
+      type: "DELETE",
+      contentType: false,
+      processData: false,
+      success: function() { 
+        alert('¡Párrafo eliminado exitosamente!');
+        location.reload(); },
+    });
+  };
+
+  /* ----------------------------------------------------------- */
+  /*  20. Create entrada
+  /* ----------------------------------------------------------- */
+
+  $.createEntrada = function(entrada = null) {
+      var formData = new FormData();
+
+      formData.append("entrada.titulo", $('#tituloEntrada').val());
+      formData.append("entrada.categoria", $.urlParam('refcat'));
+      formData.append("entrada.tipo", $.urlParam('reftipo'));
+      $.sendFile(formData, 'imagen', $('#imagen'), $.validateCheckbox($('#deleteImagen-submit')));
+
+      if ($('#imagen').val()=="" && $.validateCheckbox($('#deleteImagen-submit')))
+        formData.delete('entrada.titulo');
+
+      formData.append("descripcionimagen", $('#descripcionimagen').val());
+      formData.append("esprincipal", true);
+      if (entrada == null) {
+        $.ajax({
+            url: "http://127.0.0.1:8000/api/v1.0/general/",
+            type: "POST",
+            data: formData,
+            contentType: false,
+            processData: false,
+            success: function() { 
+              alert('¡Párrafo agregado exitosamente!');
+              location.reload(); },
+        }).fail( function() {
+            alert( "¡Error! Ningún campo se puede dejar en blanco." );
+          });
+    }else{
+      $.ajax({
+          url: "http://127.0.0.1:8000/api/v1.0/general/"+entrada+"/",
+          type: "PUT",
+          data: formData,
+          contentType: false,
+          processData: false,
+          success: function() { 
+            alert('¡Párrafo modificado exitosamente!');
+            location.reload(); },
+      });
+    }
+  };
+
+  /* ----------------------------------------------------------- */
+  /*  20. Update entrada
+  /* ----------------------------------------------------------- */
+
+
+  //Function that loads the previous form values.
+  $.editEntrada = function(entrada){
+    $.ajax({
+      url : "http://127.0.0.1:8000/api/v1.0/general/"+entrada+"/",
+      dataType: "json",
+      success : function (data) {
+
+        $('#tituloEntrada').attr('value', data.entrada.titulo);
+        $('#descripcionimagen').append(data.descripcionimagen);
+
+        imagen = data.imagen.split("/");
+
+        $('#deleteImagen').append("Eliminar " + imagen[imagen.length-1]);
+        
+        $('#descripcionimagen').append( data.descripcionimagen);
+        $('#createEntrada-submit').attr('onclick', "$.createEntrada("+entrada+"); return false;");
+      },
+      error: function() {
+        console.log("No se ha podido obtener la información");
+      }
+    });
+  };
+
+  /* ----------------------------------------------------------- */
+  /*  20. Delete entrada
+  /* ----------------------------------------------------------- */
+
+
+  //Function that loads the previous form values.
+  $.deleteEntrada = function(entrada){
+    confirm("¿Está seguro de querer eliminar esta entrada?");
+    $.ajax({
+      url: "http://127.0.0.1:8000/api/v1.0/general/"+entrada+"/",
+      type: "DELETE",
+      contentType: false,
+      processData: false,
+      success: function() { 
+        alert('¡Párrafo eliminado exitosamente!');
+        location.reload(); },
+    });
+  };
+
+  /* ----------------------------------------------------------- */
+  /*  20. Create término glosario
+  /* ----------------------------------------------------------- */
+
+  $.createTermino= function(entrada = null) {
+      var formData = new FormData();
+      formData.append("termino", $('#termino').val());
+      formData.append("definicion", $('#definicion').val());
+      formData.append("entrada", $.urlParam('refentrada'));
+      if (entrada == null) {
+        $.ajax({
+            url: "http://127.0.0.1:8000/api/v1.0/glosario/",
+            type: "POST",
+            data: formData,
+            contentType: false,
+            processData: false,
+            success: function() { 
+              alert('¡Párrafo agregado exitosamente!');
+              location.reload(); },
+        });
+    }else{
+      $.ajax({
+          url: "http://127.0.0.1:8000/api/v1.0/glosario/"+entrada+"/",
+          type: "PUT",
+          data: formData,
+          contentType: false,
+          processData: false,
+          success: function() { 
+            alert('¡Párrafo modificado exitosamente!');
+            location.reload(); },
+      });
+    }
+  };
+
+  
+  /* ----------------------------------------------------------- */
+  /*  20. Update termino 
+  /* ----------------------------------------------------------- */
+
+
+  //Function that loads the previous form values.
+  $.editTermino = function(entrada){
+    $.ajax({
+      url : "http://127.0.0.1:8000/api/v1.0/glosario/"+entrada+"/",
+      dataType: "json",
+      success : function (data) {
+
+        $('#termino').attr('value', data.termino);
+        $('#definicion').append(data.definicion);
+        
+        $('#descripcionimagen').append( data.descripcionimagen);
+        $('#createEntrada-submit').attr('onclick', "$.createEntrada("+entrada+"); return false;");
       },
       error: function() {
         console.log("No se ha podido obtener la información");
@@ -364,3 +849,25 @@ jQuery(function($){
 
 });
 
+/* ----------------------------------------------------------- */
+/*  21. Cambiar vistas de entradas.
+/* ----------------------------------------------------------- */
+
+function cambiarCategoria(nuevoParametro){
+  var urlActual = window.location;
+  urlActual = urlActual.toString();
+  var urlNueva = "";
+
+  for (var index = 0; index < urlActual.length; index++) {
+    urlNueva += urlActual[index];
+    if (urlActual[index]=="&") {
+      urlNueva += nuevoParametro;
+      break;
+    }
+  }
+  window.location = urlNueva;
+}
+
+/* ----------------------------------------------------------- */
+/*  21. Boton para añadir contenido
+/* ----------------------------------------------------------- */

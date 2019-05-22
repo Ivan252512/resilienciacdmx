@@ -71,8 +71,11 @@
         </div>
         <div id="navbar" class="navbar-collapse collapse">
           <ul id="top-menu" class="nav navbar-nav navbar-right mu-main-nav">
-              <li><a href="index.html">INICIO</a></li>
-              <li class="active"><a href="blog-archive.html">OTRAS PUBLICACIONES</a></li>                                        
+              <li><a href="index.html">Inicio</a></li>
+              <li><a href="blog-archive.html?reftipo=Educación&refcat=Sismos">Educación</a></li>
+              <li><a href="blog-archive.html?reftipo=Reflexión&refcat=Sismos">Reflexión</a></li>
+              <li><a href="blog-archive.html?reftipo=Acción&refcat=Sismos">Acción</a></li>
+              <li><a href="blog-archive.html?reftipo=Proyectos&refcat=Sismos">Proyectos</a></li>                                      
           </ul>                            
         </div><!--/.nav-collapse -->       
       </div>          
@@ -91,26 +94,103 @@
               <div class="col-md-8 col-sm-8">
                 <div class="mu-blog-content mu-blog-details">
                   <!-- Start Single blog item -->
+                  <div id="tituloentrada"></div>
                   <article class="mu-news-single">
-                    <h2><a href="#">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Cumque, distinctio!</a></h2>
-                    <figure class="mu-news-img">
-                      <a href="#"><img src="static/assets/img/news/1.jpg" alt="img"></a>                      
-                    </figure>
-                    <div class="mu-news-single-content">                      
-                      <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Optio est quaerat magnam exercitationem voluptas, voluptatem sed quam ab laborum voluptatum tempore dolores itaque, molestias vitae.</p>
-                      <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Optio est quaerat magnam exercitationem voluptas, voluptatem sed quam ab laborum voluptatum tempore dolores itaque, molestias vitae.</p>
-                    </div>                  <!-- End Blog Sidebar Single -->
+                    <div id="lista-parrafos"></div>
+                    <hr>              <!-- End Blog Sidebar Single -->
                     <div class="mu-news-single-bottom">
                       <div class="row">
                         <div class="col-md-6">                  <!-- End Blog Sidebar Single -->
                           <div class="mu-news-single-tag">
-                            <ul class="mu-news-single-tagnav">
-                              <li>TAGS :</li>
-                              <li><a href="#">Cofee,</a></li>
-                              <li><a href="#">Snacks,</a></li>
-                              <li><a href="#">Drinks,</a></li>
-                              <li><a href="#">Dessert</a></li>
-                            </ul>
+                            <p>
+                              <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#createParrafo-modal">
+                                <span class="glyphicon glyphicon-plus"></span>
+                                Añadir Párrafo
+                              </button>
+
+                              <div class="modal fade" id="createParrafo-modal" tabindex="-1" role="dialog" aria-labelledby="createParrafoLabel" aria-hidden="true">
+                                  <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+                                    <div class="modal-content">
+                                      <div class="modal-header">
+                                        <h2 class="modal-title" id="exampleModalLabel">Agregar/editar párrafo</h2>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                          <span aria-hidden="true">&times;</span>
+                                        </button>
+                                      </div>
+                                      <div class="modal-body " >
+                                          <form  class="form-horizontal" role="form" id="createParrafo" enctype="multipart/form-data">
+                                              <div class="form-group">
+                                                <div class="form-group">
+                                                  <label for="subtitulo" class="col-sm-2 control-label">Subtítulo</label>
+                                                  <div class="col-sm-9">
+                                                    <input type="text" class="form-control" id="subtitulo" placeholder="Subtítulo">
+                                                  </div>
+                                                </div>
+                                                <div class="form-group ">
+                                                  <label for="parrafo" class="col-sm-2 control-label">Párrafo</label>
+                                                  <div class="col-sm-9 ">
+                                                    <textarea name="parrafo" class="form-control" id="parrafo" cols="30" rows="10" placeholder="Párrafo o enlace de Youtube"></textarea>
+                                                  </div>
+                                                </div>
+                                                <div class="form-group">
+                                                  <div class="col-sm-offset-2 col-sm-9">
+                                                    <div class="checkbox">
+                                                      <label>
+                                                        <input type="checkbox" id="youtube"> Seleccionar si se introdujo un enlace de YouTube o Vimeo en el área de párrafo. 
+                                                      </label>
+                                                    </div>
+                                                  </div>
+                                                </div>
+                                                <div class="form-group">
+                                                  <label for="video" class="col-sm-2 control-label">Vídeo</label>
+                                                  <div class="col-sm-9">
+                                                    <input type="file" class="form-control" accept="video/*" id="video">
+                                                  
+                                                    <div class="checkbox">
+                                                      <label>
+                                                        <input type="checkbox" id="deleteVideo-submit"><label id="deleteVideo"></label>  
+                                                      </label>
+                                                    </div>
+                                                  
+                                                  </div>
+                                                </div>
+                                                <div class="form-group">
+                                                  <label for="descripcionvideo" class="col-sm-2 control-label">Descripción del vídeo</label>
+                                                  <div class="col-sm-9">
+                                                      <textarea name="descripcionvideo" class="form-control" id="descripcionvideo" cols="30" rows="4" placeholder="Descripción del vídeo"></textarea>                                                  
+                                                  </div>  
+                                                </div>
+                                                <div class="form-group">
+                                                  <label for="imagen" class="col-sm-2 control-label">Imagen</label>
+                                                  <div class="col-sm-9">
+                                                    <input type="file" class="form-control" accept="image/*" id="imagen">
+                                                  
+                                                    <div class="checkbox">
+                                                      <label>
+                                                        <input type="checkbox" id="deleteImagen-submit"><label id="deleteImagen"></label> 
+                                                      </label>
+                                                    </div>
+                                                  
+                                                  </div>
+                                                </div>
+                                                <div class="form-group">
+                                                  <label for="descripcionimagen" class="col-sm-2 control-label">Descripción de la imagen</label>
+                                                  <div class="col-sm-9">
+                                                      <textarea name="descripcionimagen" class="form-control" id="descripcionimagen" cols="30" rows="4" placeholder="Descripción de la imagen"></textarea>                                                  
+                                                  </div>
+                                                </div>
+                                              </div>
+                                          </form>
+                                      </div>
+                                      <div class="modal-footer">
+                                        <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
+                                        <button type="button" class="btn btn-primary" id="createParrafo-submit" onclick="$.createParrafo(); return false;" enctype="multipart/form-data">Guardar cambios</button>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+
+                            </p>   
                           </div>
                         </div>
                         <div class="col-md-6">
@@ -127,7 +207,7 @@
                         </div>
                       </div>
                     </div>
-                  </article>
+                  </article> 
                   <!-- End Single blog item -->                  
                 </div>
                 <!-- End Blog navigation -->
@@ -137,43 +217,56 @@
                 <aside class="mu-blog-sidebar">
                   <!-- Blog Sidebar Single -->
                   <div class="mu-blog-sidebar-single">
-                    <h3>Categorias</h3>
-                    <ul class="mu-catg-nav">
-                        <li><a href="#">Sismos</a></li>
-                        <li><a href="#">Erupción volcánica</a></li>
-                        <li><a href="#">Inestabilidad de laderas</a></li>
-                        <li><a href="#">Asteroides y cometas</a></li>
-                        <li><a href="#">Inundaciones</a></li>
-                    </ul>
-                  </div>
-                  <!-- End Blog Sidebar Single -->
-                  <!-- Blog Sidebar Single -->
-                  <div class="mu-blog-sidebar-single">
                     <h3>Glosario</h3>
                     <div class="tag-cloud" id="lista-glosario"></div>
+                    <p>
+                      <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#createTermino-modal">
+                        <span class="glyphicon glyphicon-plus"></span>
+                        Añadir término
+                      </button>
+
+                      <div class="modal fade" id="createTermino-modal" tabindex="-1" role="dialog" aria-labelledby="createTerminoLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+                          <div class="modal-content">
+                            <div class="modal-header">
+                              <h2 class="modal-title" id="exampleModalLabel">Agregar/editar término</h2>
+                              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                              </button>
+                            </div>
+
+                            <div class="modal-body " >
+                                <form  class="form-horizontal" role="form" id="createTermino" enctype="multipart/form-data">
+                                    <div class="form-group">
+                                      <div class="form-group">
+                                        <label for="termino" class="col-sm-2 control-label">Término</label>
+                                        <div class="col-sm-9">
+                                          <input type="text" class="form-control" id="termino" placeholder="Término">
+                                        </div>
+                                      </div>
+                                      <div class="form-group ">
+                                        <label for="definicion" class="col-sm-2 control-label">Definición</label>
+                                        <div class="col-sm-9 ">
+                                          <textarea name="definicion" class="form-control" id="definicion" cols="30" rows="10" placeholder="Definición"></textarea>
+                                        </div>
+                                      </div>          
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="modal-footer">
+                              <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
+                              <button type="button" class="btn btn-primary" id="createTermino-submit" onclick="$.createTermino(); return false;" enctype="multipart/form-data">Guardar cambios</button>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                    </p>    
                   </div>
                   <!-- End Blog Sidebar Single -->
                 </aside>
               </div>
               <!-- End Blog Sidebar -->
-              <!-- Start related news -->
-              <div class="row">
-                <div class="col-md-12">
-                  <div class="mu-blog-related-post">
-                    <div class="mu-title">                        
-                      <h2>Otras entradas</h2>
-                    </div>
-                    <div class="mu-blog-related-post-area">
-                      <div class="row">
-                        <div class="col-md-6 col-sm-6">
-                            <div id="lista-entradas"></div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <!-- End related news -->
             </div>
           </div>
         </div>
