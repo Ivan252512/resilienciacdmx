@@ -290,7 +290,7 @@ jQuery(function($){
                   '<h3>' + elemento.entrada.titulo + '</h3>' +
                   imagen+
                   '<div class="mu-news-single-content">' +
-                    '<p>' + elemento.parrafo + '</p>' +
+                    '<p>' + elemento.descripcionimagen + '</p>' +
                     '<div class="mu-news-single-bottom">' +
                       '<a href="blog-single.html?refentrada=' + elemento.entrada.id + '" class="mu-readmore-btn">Leer más</a>' +
                     '</div>' +
@@ -305,7 +305,7 @@ jQuery(function($){
                   '<h3>' + elemento.entrada.titulo + '</h3>' +
                   imagen +
                   '<div class="mu-news-single-content">' +
-                    '<p>' + elemento.parrafo + '</p>' +
+                    '<p>' + elemento.descripcionimagen + '</p>' +
                     '<div class="mu-news-single-bottom">' +
                       '<a href="blog-single.html?refentrada=' + elemento.entrada.id + '" class="mu-readmore-btn">Leer más</a>' +
                     '</div>' +
@@ -320,7 +320,7 @@ jQuery(function($){
                   '<h3>' + elemento.entrada.titulo + '</h3>' +
                   imagen +
                   '<div class="mu-news-single-content">' +
-                    '<p>' + elemento.parrafo + '</p>' +
+                    '<p>' + elemento.descripcionimagen + '</p>' +
                     '<div class="mu-news-single-bottom">' +
                       '<a href="blog-single.html?refentrada=' + elemento.entrada.id + '" class="mu-readmore-btn">Leer más</a>' +
                     '</div>' +
@@ -335,7 +335,7 @@ jQuery(function($){
                   '<h3>' + elemento.entrada.titulo + '</h3>' +
                   imagen+
                   '<div class="mu-news-single-content">' +
-                    '<p>' + elemento.parrafo + '</p>' +
+                    '<p>' + elemento.descripcionimagen + '</p>' +
                     '<div class="mu-news-single-bottom">' +
                       '<a href="blog-single.html?refentrada=' + elemento.entrada.id + '" class="mu-readmore-btn">Leer más</a>' +
                     '</div>' +
@@ -464,7 +464,7 @@ jQuery(function($){
         $.each(data, function(index, elemento){
 
           var editButton = 
-          '<button type="button" class="btn btn-warning" data-toggle="modal" data-target="#createTermini-modal" onclick="$.editTermino('+elemento.id+');">'+
+          '<button type="button" class="btn btn-warning" data-toggle="modal" data-target="#createTermino-modal" onclick="$.editTermino('+elemento.id+');">'+
             'Editar el termino inferior'+
           '</button>';
   
@@ -685,7 +685,10 @@ jQuery(function($){
 
   //Function that loads the previous form values.
   $.deleteParrafo = function(entrada){
-    confirm("¿Está seguro de querer eliminar este mensaje?");
+    var c = confirm("¿Está seguro de querer eliminar este párrafo");
+    if(!c)
+      return;
+
     $.ajax({
       url: "http://127.0.0.1:8000/api/v1.0/parrafoedit/"+entrada+"/",
       type: "DELETE",
@@ -776,7 +779,11 @@ jQuery(function($){
 
   //Function that loads the previous form values.
   $.deleteEntrada = function(entrada){
-    confirm("¿Está seguro de querer eliminar esta entrada?");
+    var c = confirm("¿Está seguro de querer eliminar esta entrada?");
+
+    if (!c)
+      return;
+
     $.ajax({
       url: "http://127.0.0.1:8000/api/v1.0/general/"+entrada+"/",
       type: "DELETE",
@@ -799,24 +806,24 @@ jQuery(function($){
       formData.append("entrada", $.urlParam('refentrada'));
       if (entrada == null) {
         $.ajax({
-            url: "http://127.0.0.1:8000/api/v1.0/glosario/",
+            url: "http://127.0.0.1:8000/api/v1.0/glosariowrite/",
             type: "POST",
             data: formData,
             contentType: false,
             processData: false,
             success: function() { 
-              alert('¡Párrafo agregado exitosamente!');
+              alert('¡Término agregado exitosamente!');
               location.reload(); },
         });
     }else{
       $.ajax({
-          url: "http://127.0.0.1:8000/api/v1.0/glosario/"+entrada+"/",
+          url: "http://127.0.0.1:8000/api/v1.0/glosariowrite/"+entrada+"/",
           type: "PUT",
           data: formData,
           contentType: false,
           processData: false,
           success: function() { 
-            alert('¡Párrafo modificado exitosamente!');
+            alert('¡Término modificado exitosamente!');
             location.reload(); },
       });
     }
@@ -831,7 +838,7 @@ jQuery(function($){
   //Function that loads the previous form values.
   $.editTermino = function(entrada){
     $.ajax({
-      url : "http://127.0.0.1:8000/api/v1.0/glosario/"+entrada+"/",
+      url : "http://127.0.0.1:8000/api/v1.0/glosariowrite/"+entrada+"/",
       dataType: "json",
       success : function (data) {
 
@@ -839,11 +846,32 @@ jQuery(function($){
         $('#definicion').append(data.definicion);
         
         $('#descripcionimagen').append( data.descripcionimagen);
-        $('#createEntrada-submit').attr('onclick', "$.createEntrada("+entrada+"); return false;");
+        $('#createTermino-submit').attr('onclick', "$.createTermino("+entrada+"); return false;");
       },
       error: function() {
         console.log("No se ha podido obtener la información");
       }
+    });
+  };
+
+    /* ----------------------------------------------------------- */
+  /*  20. Delete entrada
+  /* ----------------------------------------------------------- */
+
+
+  //Function that loads the previous form values.
+  $.deleteTermino = function(entrada){
+    var c = confirm("¿Está seguro de querer eliminar este término?");
+    if (!c)
+      return ;
+    $.ajax({
+      url: "http://127.0.0.1:8000/api/v1.0/glosariowrite/"+entrada+"/",
+      type: "DELETE",
+      contentType: false,
+      processData: false,
+      success: function() { 
+        alert('¡Término eliminado exitosamente!');
+        location.reload(); },
     });
   };
 
